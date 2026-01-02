@@ -30,9 +30,45 @@
         h1 {
             text-align: center;
             color: #2a2a2a;
-            margin-bottom: 20px;
+            margin: 0;
             font-size: 24px;
             font-weight: 900;
+            flex: 1;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-button {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2a2a2a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            touch-action: manipulation;
+        }
+
+        .icon-button:active {
+            transform: scale(0.95);
+            background: #1a1a1a;
         }
 
         .setup {
@@ -166,58 +202,84 @@
             margin-top: 15px;
             max-height: 550px;
             position: relative;
-            border: 2px solid #d0d0d0;
-            border-radius: 8px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             font-size: 14px;
         }
 
         th, td {
-            padding: 12px 8px;
+            padding: 14px 10px;
             text-align: center;
-            border: 1px solid #e8e8e8;
         }
 
         th {
-            background: #2a2a2a;
-            color: #E8B77D;
-            font-weight: bold;
+            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+            color: white;
+            font-weight: 700;
             position: sticky;
             top: 0;
             z-index: 10;
+            border-bottom: 2px solid #E8B77D;
+        }
+
+        th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 12px;
         }
 
         td {
             background: white;
             color: #2a2a2a;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr:hover td {
+            background: #FFF8F0;
         }
 
         tr:nth-child(even) td {
+            background: #FAFAFA;
+        }
+
+        tr:nth-child(even):hover td {
             background: #FFF8F0;
         }
 
         tfoot {
             position: sticky;
             bottom: 0;
-            z-index: 10;
+            z-index: 11;
         }
 
         .total-row {
             font-weight: bold;
-            background: #E8B77D !important;
         }
 
         .total-row td {
-            background: #E8B77D !important;
+            background: linear-gradient(180deg, #E8B77D 0%, #D4A86A 100%) !important;
             color: #2a2a2a;
             font-size: 18px;
             font-weight: 900;
-            padding: 14px 8px;
-            border: 2px solid #d0d0d0;
+            padding: 16px 10px;
+            border-top: 2px solid #2a2a2a;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .total-row td:first-child {
+            border-bottom-left-radius: 12px;
+        }
+
+        .total-row td:last-child {
+            border-bottom-right-radius: 12px;
         }
 
         .hidden {
@@ -236,7 +298,12 @@
 
             h1 {
                 font-size: 20px;
-                margin-bottom: 15px;
+            }
+
+            .icon-button {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
             }
 
             th, td {
@@ -270,7 +337,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎯 Quickstop Scoresheet</h1>
+        <div class="header">
+            <h1>🎯 Quickstop Scoresheet</h1>
+            <div class="toolbar hidden" id="toolbar">
+                <button type="button" class="icon-button" onclick="resetGame()" title="Neues Spiel">
+                    🔄
+                </button>
+            </div>
+        </div>
 
         <div id="setup" class="setup">
             <div class="player-input">
@@ -307,8 +381,6 @@
                     </tfoot>
                 </table>
             </div>
-
-            <button type="button" onclick="resetGame()" style="margin-top: 20px;">Neues Spiel</button>
         </div>
     </div>
 
@@ -350,6 +422,7 @@
 
             document.getElementById('setup').classList.add('hidden');
             document.getElementById('gameSection').classList.remove('hidden');
+            document.getElementById('toolbar').classList.remove('hidden');
 
             // Setup table header
             const header = document.getElementById('tableHeader');
@@ -490,6 +563,7 @@
 
                 document.getElementById('setup').classList.remove('hidden');
                 document.getElementById('gameSection').classList.add('hidden');
+                document.getElementById('toolbar').classList.add('hidden');
                 document.getElementById('playerName').value = '';
                 document.getElementById('startBtn').disabled = true;
 
