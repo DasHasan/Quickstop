@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quickstop Scoresheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 100%;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .setup {
+            margin-bottom: 20px;
+        }
+
+        .player-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .player-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .score-input-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .score-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .score-input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .score-input-row label {
+            flex: 1;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .score-input-row input {
+            width: 80px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            background: white;
+        }
+
+        tr:nth-child(even) td {
+            background: #f9f9f9;
+        }
+
+        .total-row {
+            font-weight: bold;
+            background: #764ba2 !important;
+            color: white;
+        }
+
+        .total-row td {
+            background: #764ba2 !important;
+            color: white;
+            font-size: 16px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .btn-secondary {
+            background: #764ba2;
+        }
+
+        .btn-secondary:hover {
+            background: #5f3a82;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            th, td {
+                padding: 8px 4px;
+                font-size: 13px;
+            }
+
+            button {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Quickstop Scoresheet</h1>
+
+        <div id="setup" class="setup">
+            <div class="player-input">
+                <input type="text" id="playerName" placeholder="Spielername eingeben" />
+                <button onclick="addPlayer()">Hinzufügen</button>
+            </div>
+            <button onclick="startGame()" id="startBtn" disabled>Spiel starten</button>
+        </div>
+
+        <div id="gameSection" class="hidden">
+            <div class="score-input-section">
+                <h3 style="margin-bottom: 15px; color: #333;">Runde <span id="roundNumber">1</span></h3>
+                <div id="scoreInputs" class="score-inputs"></div>
+                <button onclick="addRound()">Runde hinzufügen</button>
+            </div>
+
+            <div class="table-container">
+                <table id="scoreTable">
+                    <thead>
+                        <tr id="tableHeader">
+                            <th>Runde</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                    <tfoot>
+                        <tr class="total-row" id="totalRow">
+                            <td>Summe</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <button onclick="resetGame()" class="btn-secondary" style="margin-top: 20px; width: 100%;">Neues Spiel</button>
+        </div>
+    </div>
+
+    <script>
+        let players = [];
+        let rounds = [];
+        let currentRound = 1;
+
+        function addPlayer() {
+            const input = document.getElementById('playerName');
+            const name = input.value.trim();
+
+            if (name && !players.includes(name)) {
+                players.push(name);
+                input.value = '';
+                updatePlayerList();
+                document.getElementById('startBtn').disabled = players.length === 0;
+            }
+        }
+
+        function updatePlayerList() {
+            const setup = document.getElementById('setup');
+            let listHtml = '<div style="margin: 15px 0;"><strong>Spieler:</strong> ' + players.join(', ') + '</div>';
+
+            const existingList = setup.querySelector('div:not(.player-input)');
+            if (existingList && existingList.tagName === 'DIV') {
+                existingList.remove();
+            }
+
+            const playerInput = setup.querySelector('.player-input');
+            playerInput.insertAdjacentHTML('afterend', listHtml);
+        }
+
+        function startGame() {
+            if (players.length === 0) return;
+
+            document.getElementById('setup').classList.add('hidden');
+            document.getElementById('gameSection').classList.remove('hidden');
+
+            // Setup table header
+            const header = document.getElementById('tableHeader');
+            players.forEach(player => {
+                const th = document.createElement('th');
+                th.textContent = player;
+                header.appendChild(th);
+            });
+
+            // Setup total row
+            const totalRow = document.getElementById('totalRow');
+            players.forEach(() => {
+                const td = document.createElement('td');
+                td.textContent = '0';
+                totalRow.appendChild(td);
+            });
+
+            // Setup score inputs
+            setupScoreInputs();
+        }
+
+        function setupScoreInputs() {
+            const container = document.getElementById('scoreInputs');
+            container.innerHTML = '';
+
+            players.forEach((player, index) => {
+                const row = document.createElement('div');
+                row.className = 'score-input-row';
+                row.innerHTML = `
+                    <label>${player}:</label>
+                    <input type="number" id="score-${index}" value="0" min="0" />
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function addRound() {
+            const scores = [];
+            players.forEach((player, index) => {
+                const input = document.getElementById(`score-${index}`);
+                scores.push(parseInt(input.value) || 0);
+                input.value = '0'; // Reset for next round
+            });
+
+            rounds.push(scores);
+
+            // Add row to table
+            const tbody = document.getElementById('tableBody');
+            const row = document.createElement('tr');
+
+            const roundCell = document.createElement('td');
+            roundCell.textContent = currentRound;
+            row.appendChild(roundCell);
+
+            scores.forEach(score => {
+                const cell = document.createElement('td');
+                cell.textContent = score;
+                row.appendChild(cell);
+            });
+
+            tbody.appendChild(row);
+
+            // Update totals
+            updateTotals();
+
+            currentRound++;
+            document.getElementById('roundNumber').textContent = currentRound;
+        }
+
+        function updateTotals() {
+            const totals = new Array(players.length).fill(0);
+
+            rounds.forEach(round => {
+                round.forEach((score, index) => {
+                    totals[index] += score;
+                });
+            });
+
+            const totalRow = document.getElementById('totalRow');
+            const cells = totalRow.querySelectorAll('td:not(:first-child)');
+
+            totals.forEach((total, index) => {
+                cells[index].textContent = total;
+            });
+        }
+
+        function resetGame() {
+            if (confirm('Möchtest du wirklich ein neues Spiel starten? Alle Daten gehen verloren.')) {
+                players = [];
+                rounds = [];
+                currentRound = 1;
+
+                document.getElementById('setup').classList.remove('hidden');
+                document.getElementById('gameSection').classList.add('hidden');
+                document.getElementById('playerName').value = '';
+                document.getElementById('startBtn').disabled = true;
+
+                // Clear table
+                document.getElementById('tableHeader').innerHTML = '<th>Runde</th>';
+                document.getElementById('tableBody').innerHTML = '';
+                document.getElementById('totalRow').innerHTML = '<td>Summe</td>';
+                document.getElementById('roundNumber').textContent = '1';
+
+                // Remove player list
+                const setup = document.getElementById('setup');
+                const existingList = setup.querySelector('div:not(.player-input)');
+                if (existingList) {
+                    existingList.remove();
+                }
+            }
+        }
+
+        // Allow Enter key to add player
+        document.getElementById('playerName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addPlayer();
+            }
+        });
+    </script>
+</body>
+</html>
