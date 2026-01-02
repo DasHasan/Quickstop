@@ -389,6 +389,80 @@
         let rounds = [];
         let currentRound = 1;
 
+        // LocalStorage functions
+        function saveGame() {
+            const gameState = {
+                players: players,
+                rounds: rounds,
+                currentRound: currentRound
+            };
+            localStorage.setItem('quickstopGame', JSON.stringify(gameState));
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('quickstopGame');
+            if (saved) {
+                try {
+                    const gameState = JSON.parse(saved);
+                    players = gameState.players || [];
+                    rounds = gameState.rounds || [];
+                    currentRound = gameState.currentRound || 1;
+
+                    if (players.length > 0 && rounds.length > 0) {
+                        // Restore game state
+                        document.getElementById('setup').classList.add('hidden');
+                        document.getElementById('gameSection').classList.remove('hidden');
+                        document.getElementById('toolbar').classList.remove('hidden');
+
+                        // Setup table header
+                        const header = document.getElementById('tableHeader');
+                        players.forEach(player => {
+                            const th = document.createElement('th');
+                            th.textContent = player;
+                            header.appendChild(th);
+                        });
+
+                        // Setup total row
+                        const totalRow = document.getElementById('totalRow');
+                        players.forEach(() => {
+                            const td = document.createElement('td');
+                            td.textContent = '0';
+                            totalRow.appendChild(td);
+                        });
+
+                        // Restore all rounds
+                        const tbody = document.getElementById('tableBody');
+                        rounds.forEach((scores, roundIndex) => {
+                            const row = document.createElement('tr');
+                            const roundCell = document.createElement('td');
+                            roundCell.textContent = roundIndex + 1;
+                            row.appendChild(roundCell);
+
+                            scores.forEach(score => {
+                                const cell = document.createElement('td');
+                                cell.textContent = score;
+                                row.appendChild(cell);
+                            });
+
+                            tbody.appendChild(row);
+                        });
+
+                        // Update totals
+                        updateTotals();
+
+                        // Update round number
+                        document.getElementById('roundNumber').textContent = currentRound;
+
+                        // Setup score inputs
+                        setupScoreInputs();
+                    }
+                } catch (e) {
+                    console.error('Failed to load game:', e);
+                    localStorage.removeItem('quickstopGame');
+                }
+            }
+        }
+
         function addPlayer() {
             const input = document.getElementById('playerName');
             const name = input.value.trim();
@@ -442,6 +516,9 @@
 
             // Setup score inputs
             setupScoreInputs();
+
+            // Save game state
+            saveGame();
         }
 
         function setupScoreInputs() {
@@ -528,6 +605,9 @@
             currentRound++;
             document.getElementById('roundNumber').textContent = currentRound;
 
+            // Save game state
+            saveGame();
+
             // Focus first input to keep keyboard open
             const firstInput = document.getElementById('score-0');
             if (firstInput) {
@@ -578,6 +658,9 @@
                 if (existingList) {
                     existingList.remove();
                 }
+
+                // Clear localStorage
+                localStorage.removeItem('quickstopGame');
             }
         }
 
@@ -590,6 +673,9 @@
                 setTimeout(() => this.focus(), 100);
             }
         });
+
+        // Load saved game on page load
+        window.addEventListener('DOMContentLoaded', loadGame);
     </script>
 </body>
 </html>
