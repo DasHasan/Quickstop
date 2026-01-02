@@ -99,24 +99,25 @@
         }
 
         .score-input-section {
-            margin: 20px 0;
-            padding: 15px;
+            margin: 15px 0;
+            padding: 12px;
             background: #FFF5E6;
             border-radius: 8px;
             border: 2px solid #F5A623;
         }
 
         .score-input-section h3 {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #1a1a1a;
             font-weight: 800;
+            font-size: 16px;
         }
 
         .score-inputs {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 10px;
         }
 
         .score-input-row {
@@ -129,15 +130,15 @@
             flex: 1;
             font-weight: bold;
             color: #1a1a1a;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .score-input-row input {
-            width: 90px;
-            padding: 14px;
+            width: 80px;
+            padding: 10px;
             border: 3px solid #1a1a1a;
             border-radius: 8px;
-            font-size: 20px;
+            font-size: 18px;
             text-align: center;
             font-weight: bold;
         }
@@ -148,11 +149,16 @@
             box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.2);
         }
 
+        .score-input-section button {
+            padding: 12px 20px;
+            font-size: 16px;
+        }
+
         .table-container {
             overflow-x: auto;
             overflow-y: auto;
-            margin-top: 20px;
-            max-height: 400px;
+            margin-top: 15px;
+            max-height: 500px;
             position: relative;
             border: 3px solid #1a1a1a;
             border-radius: 8px;
@@ -237,9 +243,13 @@
             }
 
             .score-input-row input {
-                width: 80px;
-                font-size: 18px;
-                padding: 12px;
+                width: 70px;
+                font-size: 16px;
+                padding: 8px;
+            }
+
+            .table-container {
+                max-height: 450px;
             }
         }
     </style>
@@ -302,6 +312,9 @@
                 input.value = '';
                 updatePlayerList();
                 document.getElementById('startBtn').disabled = players.length === 0;
+
+                // Keep focus on input
+                setTimeout(() => input.focus(), 50);
             }
         }
 
@@ -364,10 +377,35 @@
                 container.appendChild(row);
             });
 
+            // Add Enter key navigation
+            players.forEach((player, index) => {
+                const input = document.getElementById(`score-${index}`);
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const nextIndex = index + 1;
+                        if (nextIndex < players.length) {
+                            // Focus next input
+                            const nextInput = document.getElementById(`score-${nextIndex}`);
+                            if (nextInput) {
+                                nextInput.focus();
+                                nextInput.select();
+                            }
+                        } else {
+                            // Last input - blur to trigger button press
+                            input.blur();
+                        }
+                    }
+                });
+            });
+
             // Focus first input
             const firstInput = document.getElementById('score-0');
             if (firstInput) {
-                setTimeout(() => firstInput.focus(), 100);
+                setTimeout(() => {
+                    firstInput.focus();
+                    firstInput.select();
+                }, 100);
             }
         }
 
@@ -406,7 +444,10 @@
             // Focus first input to keep keyboard open
             const firstInput = document.getElementById('score-0');
             if (firstInput) {
-                setTimeout(() => firstInput.focus(), 100);
+                setTimeout(() => {
+                    firstInput.focus();
+                    firstInput.select();
+                }, 100);
             }
         }
 
