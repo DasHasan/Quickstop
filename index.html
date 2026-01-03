@@ -16,7 +16,7 @@
             background: #f8f9fa;
             min-height: 100vh;
             padding: 12px;
-            padding-bottom: 80px;
+            padding-bottom: 200px;
         }
 
         .container {
@@ -24,6 +24,7 @@
             background: white;
             border-radius: 16px;
             padding: 24px;
+            padding-bottom: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
@@ -31,10 +32,10 @@
             text-align: center;
             color: #1e293b;
             margin: 0;
-            font-size: 28px;
+            font-size: 20px;
             font-weight: 800;
             flex: 1;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
         }
 
         .header {
@@ -145,19 +146,22 @@
         }
 
         .score-input-section {
-            margin: 18px 0;
-            padding: 18px;
-            background: #f8fafc;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            overflow: hidden;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: white;
+            border-top: 2px solid #e2e8f0;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+            z-index: 100;
         }
 
         .score-input-section h3 {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: #1e293b;
-            font-weight: 800;
-            font-size: 18px;
+            font-weight: 700;
+            font-size: 15px;
         }
 
         .score-inputs {
@@ -213,8 +217,9 @@
         .table-container {
             overflow-x: auto;
             overflow-y: auto;
-            margin-top: 18px;
-            max-height: 550px;
+            margin-top: 0;
+            margin-bottom: 12px;
+            max-height: calc(100vh - 280px);
             position: relative;
             border-radius: 12px;
             background: white;
@@ -306,21 +311,22 @@
         @media (max-width: 480px) {
             body {
                 padding: 10px;
+                padding-bottom: 180px;
             }
 
             .container {
-                padding: 18px;
-                border-radius: 20px;
+                padding: 16px;
+                padding-bottom: 8px;
             }
 
             h1 {
-                font-size: 24px;
+                font-size: 18px;
             }
 
             .icon-button {
-                width: 44px;
-                height: 44px;
-                font-size: 20px;
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
             }
 
             th, td {
@@ -333,22 +339,32 @@
                 padding: 16px 8px;
             }
 
+            .score-input-section {
+                padding: 12px;
+            }
+
+            .score-input-section h3 {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
             .score-input-row input {
-                width: 68px;
+                width: 64px;
                 font-size: 18px;
                 padding: 10px 6px;
             }
 
             .score-input-row label {
-                font-size: 12px;
+                font-size: 11px;
             }
 
             .score-inputs {
-                gap: 10px;
+                gap: 8px;
+                margin-bottom: 8px;
             }
 
             .table-container {
-                max-height: 480px;
+                max-height: calc(100vh - 240px);
             }
         }
     </style>
@@ -378,12 +394,6 @@
         </div>
 
         <div id="gameSection" class="hidden">
-            <div class="score-input-section">
-                <h3>Runde <span id="roundNumber">1</span></h3>
-                <div id="scoreInputs" class="score-inputs"></div>
-                <button type="button" onclick="addRound()">Runde hinzufügen</button>
-            </div>
-
             <div class="table-container">
                 <table id="scoreTable">
                     <thead>
@@ -399,6 +409,12 @@
                     </tfoot>
                 </table>
             </div>
+        </div>
+
+        <div class="score-input-section hidden" id="scoreInputSection">
+            <h3>Runde <span id="roundNumber">1</span></h3>
+            <div id="scoreInputs" class="score-inputs"></div>
+            <button type="button" onclick="addRound()">Runde hinzufügen</button>
         </div>
     </div>
 
@@ -430,6 +446,7 @@
                         // Restore game state
                         document.getElementById('setup').classList.add('hidden');
                         document.getElementById('gameSection').classList.remove('hidden');
+                        document.getElementById('scoreInputSection').classList.remove('hidden');
                         document.getElementById('toolbar').classList.remove('hidden');
 
                         // Setup table header
@@ -514,6 +531,7 @@
 
             document.getElementById('setup').classList.add('hidden');
             document.getElementById('gameSection').classList.remove('hidden');
+            document.getElementById('scoreInputSection').classList.remove('hidden');
             document.getElementById('toolbar').classList.remove('hidden');
 
             // Setup table header
@@ -661,6 +679,7 @@
 
                 document.getElementById('setup').classList.remove('hidden');
                 document.getElementById('gameSection').classList.add('hidden');
+                document.getElementById('scoreInputSection').classList.add('hidden');
                 document.getElementById('toolbar').classList.add('hidden');
                 document.getElementById('playerName').value = '';
                 document.getElementById('startBtn').disabled = true;
