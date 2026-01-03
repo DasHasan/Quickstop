@@ -12,28 +12,33 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #FDF3E7;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 10px;
-            padding-bottom: 100px;
+            padding: 12px;
+            padding-bottom: 80px;
         }
 
         .container {
             max-width: 100%;
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         h1 {
             text-align: center;
-            color: #2a2a2a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin: 0;
-            font-size: 24px;
-            font-weight: 900;
+            font-size: 28px;
+            font-weight: 800;
             flex: 1;
+            letter-spacing: -0.5px;
         }
 
         .header {
@@ -50,25 +55,31 @@
         }
 
         .icon-button {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #2a2a2a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 20px;
+            border-radius: 16px;
+            font-size: 22px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             touch-action: manipulation;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .icon-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
         .icon-button:active {
-            transform: scale(0.95);
-            background: #1a1a1a;
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
 
         .setup {
@@ -84,70 +95,89 @@
 
         .player-input input {
             width: 100%;
-            padding: 14px;
-            border: 2px solid #d0d0d0;
-            border-radius: 8px;
-            font-size: 18px;
+            padding: 16px 18px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 16px;
+            font-size: 17px;
             font-weight: 500;
+            background: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .player-input input:focus {
             outline: none;
-            border-color: #E8B77D;
-            box-shadow: 0 0 0 3px rgba(232, 183, 125, 0.15);
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
         }
 
         .player-list {
-            margin: 15px 0;
-            padding: 12px;
-            background: #FFF8F0;
-            border-radius: 8px;
-            border: 2px solid #E8B77D;
+            margin: 16px 0;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+            border-radius: 16px;
+            border: 2px solid rgba(102, 126, 234, 0.15);
         }
 
         .player-list strong {
-            color: #2a2a2a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
         }
 
         button {
             width: 100%;
-            padding: 16px 20px;
-            background: #2a2a2a;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             touch-action: manipulation;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
         button:active {
-            transform: scale(0.98);
-            background: #1a1a1a;
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
 
         button:disabled {
-            background: #ccc;
+            background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         .score-input-section {
-            margin: 15px 0;
-            padding: 12px;
-            background: #FFF8F0;
-            border-radius: 8px;
-            border: 2px solid #E8B77D;
+            margin: 18px 0;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.15);
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .score-input-section h3 {
-            margin-bottom: 10px;
-            color: #2a2a2a;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 800;
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .score-inputs {
@@ -169,89 +199,101 @@
         }
 
         .score-input-row label {
-            font-weight: bold;
-            color: #2a2a2a;
-            font-size: 14px;
+            font-weight: 700;
+            color: #475569;
+            font-size: 13px;
             white-space: nowrap;
+            letter-spacing: 0.3px;
         }
 
         .score-input-row input {
-            width: 70px;
-            padding: 10px;
-            border: 2px solid #d0d0d0;
-            border-radius: 8px;
-            font-size: 18px;
+            width: 72px;
+            padding: 12px 8px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 14px;
+            font-size: 20px;
             text-align: center;
-            font-weight: bold;
+            font-weight: 700;
+            background: white;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .score-input-row input:focus {
             outline: none;
-            border-color: #E8B77D;
-            box-shadow: 0 0 0 3px rgba(232, 183, 125, 0.15);
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: scale(1.05);
         }
 
         .score-input-section button {
-            padding: 12px 20px;
+            padding: 14px 24px;
             font-size: 16px;
+            font-weight: 700;
         }
 
         .table-container {
             overflow-x: auto;
             overflow-y: auto;
-            margin-top: 15px;
+            margin-top: 18px;
             max-height: 550px;
             position: relative;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            font-size: 14px;
+            font-size: 15px;
         }
 
         th, td {
-            padding: 14px 10px;
+            padding: 16px 12px;
             text-align: center;
         }
 
         th {
-            background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             font-weight: 700;
             position: sticky;
             top: 0;
             z-index: 10;
-            border-bottom: 2px solid #E8B77D;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.5px;
+            font-size: 14px;
+            text-transform: uppercase;
         }
 
         th:first-child {
-            border-top-left-radius: 12px;
+            border-top-left-radius: 20px;
         }
 
         th:last-child {
-            border-top-right-radius: 12px;
+            border-top-right-radius: 20px;
         }
 
         td {
             background: white;
-            color: #2a2a2a;
-            border-bottom: 1px solid #f0f0f0;
+            color: #1e293b;
+            border-bottom: 1px solid #f1f5f9;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
 
         tbody tr:hover td {
-            background: #FFF8F0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            transform: scale(1.01);
         }
 
         tr:nth-child(even) td {
-            background: #FAFAFA;
+            background: #f8fafc;
         }
 
         tr:nth-child(even):hover td {
-            background: #FFF8F0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
         }
 
         tfoot {
@@ -265,21 +307,22 @@
         }
 
         .total-row td {
-            background: linear-gradient(180deg, #E8B77D 0%, #D4A86A 100%) !important;
-            color: #2a2a2a;
-            font-size: 18px;
-            font-weight: 900;
-            padding: 16px 10px;
-            border-top: 2px solid #2a2a2a;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white;
+            font-size: 20px;
+            font-weight: 800;
+            padding: 18px 12px;
+            border-top: none;
+            box-shadow: 0 -4px 20px rgba(102, 126, 234, 0.2);
+            letter-spacing: 0.5px;
         }
 
         .total-row td:first-child {
-            border-bottom-left-radius: 12px;
+            border-bottom-left-radius: 20px;
         }
 
         .total-row td:last-child {
-            border-bottom-right-radius: 12px;
+            border-bottom-right-radius: 20px;
         }
 
         .hidden {
@@ -288,41 +331,42 @@
 
         @media (max-width: 480px) {
             body {
-                padding: 8px;
+                padding: 10px;
             }
 
             .container {
-                padding: 15px;
-                border-radius: 8px;
+                padding: 18px;
+                border-radius: 20px;
             }
 
             h1 {
-                font-size: 20px;
+                font-size: 24px;
             }
 
             .icon-button {
-                width: 40px;
-                height: 40px;
-                font-size: 18px;
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
             }
 
             th, td {
-                padding: 10px 6px;
+                padding: 12px 8px;
                 font-size: 14px;
             }
 
             .total-row td {
-                font-size: 16px;
+                font-size: 18px;
+                padding: 16px 8px;
             }
 
             .score-input-row input {
-                width: 65px;
-                font-size: 16px;
-                padding: 8px;
+                width: 68px;
+                font-size: 18px;
+                padding: 10px 6px;
             }
 
             .score-input-row label {
-                font-size: 13px;
+                font-size: 12px;
             }
 
             .score-inputs {
